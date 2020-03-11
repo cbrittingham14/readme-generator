@@ -1,0 +1,27 @@
+{
+  "name": "readme-generator",
+  "version": "1.0.0",
+  "description": "package.json for readme generator including axios and inquirer",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cbrittingham14/readme-generator.git"
+  },
+  "keywords": [
+    "readme",
+    "generator"
+  ],
+  "author": "chizz",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cbrittingham14/readme-generator/issues"
+  },
+  "homepage": "https://github.com/cbrittingham14/readme-generator#readme",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "inquirer": "^7.1.0"
+  }
+}

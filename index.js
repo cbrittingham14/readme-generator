@@ -72,16 +72,14 @@ let questions = [
 inquirer
     .prompt(questions)
     .then(function(inputs) {
-        const queryUrl = `https://api.github.com/users/${inputs.username}/repos?per_page=10`;
+        const queryUrl = `https://api.github.com/users/${inputs.username}/events/public`;
         axios
           .get(queryUrl)
           .then(function({ data }) {
-              console.log(data);
-              console.log(data.length);
-              console.log(data[0].owner);
-              gitImageURL = data[0].owner.avatar_url;
+              gitImageURL = data[0].actor.avatar_url;
+              userEmail = data[0].payload.commits[0].author.email;
               console.log(gitImageURL);
-
+              console.log(userEmail);
           })
           .catch(function(err){
               console.log(err);

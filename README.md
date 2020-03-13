@@ -1,6 +1,23 @@
-#joey battafuco
-    ##Description
-    fahget about it
-    ##License
-    [Apache](https://camo.githubusercontent.com/6e97fc42cf3a7104864fabeae2596615886e6736/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f6c6963656e73652d4147504c2d626c75652e737667)
-    
+# README GENERATOR
+
+## Description
+
+This application will generate a README based on user inputs for pre specified categories.
+
+It will send a request to github to retrieve the user picture and email (if they are provided) for the 
+specified user.
+
+## Instructions for use
+
+The application is designed to be run in node.js, and requires the axios and inquirer modules.
+The package.json file can be found in the github repo for reference.
+
+Use npm init to set up your package.json otherwise.
+
+Start writing your file by calling node index.js in the terimal in the correct directory.
+
+
+
+
+## Screenshot
+![screenshot 1](/images.screenshot.png)

@@ -69,38 +69,36 @@ const questions = [
     }
 ]
 inquirer
-    .prompt(questions)
+    .prompt(questions) //start prompting user for read me questions
     .then(function(inputs) {
-        let { license } = inputs;
+        let { license } = inputs; // get license from the anser object
         getBadgeURL(license);
-        console.log(inputs);
         const queryUrl = `https://api.github.com/users/${inputs.username}/events/public`;
         axios
-          .get(queryUrl)
-          .then(function({ data }) {
-              if(data.length > 0){
+          .get(queryUrl) //send api request to github
+          .then(function({ data }) { //deal with returned data
+              if(data.length > 0){ //make sure user name is valid
                 gitImageURL = data[0].actor.avatar_url;
               }else{
                   throw Error("User not found");
               }
-              if(data[0].payload.commits){
+              if(data[0].payload.commits){ // make sure user email is provided
                 userEmail = data[0].payload.commits[0].author.email;
               } else{
                   userEmail = "No email provided"
               }
-              markDown = makeMarkdown(inputs, gitImageURL, userEmail);
-              fs.writeFile("readme.html", markDown, function(err){
+              markDown = makeMarkdown(inputs, gitImageURL, userEmail); //call readme writer
+              fs.writeFile("readme.html", markDown, function(err){ //save readme file
                 if(err){
-                    console.log(err);
+                    throw Error(err);
                 }
-                console.log("I think we made a file");
               })
           })
           .catch(function(err){
-              console.log(err);
+              throw Error(err);
           });
     });      
-
+    //determine badge
     function getBadgeURL(lic){
         if(lic === 'apache'){
             badgeURL = apacheSrc;
@@ -110,10 +108,11 @@ inquirer
             badgeURL = gnuSrc;
         }
     }
+    //write markdown
     function makeMarkdown(inputs, gitURL, email){
         var markdown = `<!DOCTYPE=html>
         <title>${inputs.title}</title>
-        <h1>#${inputs.title}<h1>
+        <h1>${inputs.title}<h1>
         <h3 class="description">Description</h3>
         <div>${inputs.description}</div>
         <h3>Table of Contents</h3>
@@ -136,7 +135,7 @@ inquirer
         <br>
         <h3  id="installation">Installation</h3>
         <div>${inputs.installation}</div>
-        <h3 id="use">##Use</h3>
+        <h3 id="use">Use</h3>
         <div>${inputs.use}</div>
         <h3 id="contribute">Contribute</h3>
         <div>${inputs.contribute}</div>

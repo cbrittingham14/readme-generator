@@ -73,16 +73,22 @@ inquirer
     .then(function(inputs) {
         let { license } = inputs;
         getBadgeURL(license);
-        markDown = makeMarkdown(inputs);
         console.log(inputs);
         const queryUrl = `https://api.github.com/users/${inputs.username}/events/public`;
         axios
           .get(queryUrl)
           .then(function({ data }) {
-              gitImageURL = data[0].actor.avatar_url;
-              userEmail = data[0].payload.commits[0].author.email;
-              console.log(gitImageURL);
-              console.log(userEmail);
+              if(data.length > 0){
+                gitImageURL = data[0].actor.avatar_url;
+              }else{
+                  throw Error("User not found");
+              }
+              if(data[0].payload.commits){
+                userEmail = data[0].payload.commits[0].author.email;
+              } else{
+                  userEmail = "No email provided"
+              }
+              markDown = makeMarkdown(inputs, gitImageURL, userEmail);
               fs.writeFile("readme.html", markDown, function(err){
                 if(err){
                     console.log(err);
@@ -104,28 +110,43 @@ inquirer
             badgeURL = gnuSrc;
         }
     }
-    function makeMarkdown(data){
+    function makeMarkdown(inputs, gitURL, email){
         var markdown = `<!DOCTYPE=html>
-        <title>${data.title}</title>
-        <h1>#${data.title}<h1>
-        <h2>##Description</h2>
-        <div>${data.description}</div>
-        <h2>##License</h2>
-        <img src="${badgeURL}" alt="${data.license} license" />
+        <title>${inputs.title}</title>
+        <h1>#${inputs.title}<h1>
+        <h3 class="description">Description</h3>
+        <div>${inputs.description}</div>
+        <h3>Table of Contents</h3>
+        <a href="#license">License</a>
+        <br>
+        <a href="#installation">Installation</a>
+        <br>
+        <a href="#use">Use</a>
+        <br>
+        <a href="#contribute">Contribute</a>
+        <br>
+        <a href="#test">Test</a>
+        <br>
+        <a href="#questions">Questions</a>
+        <br>
+        <a href="#contact">Contact</a>
+        <br>
+        <h3 id="license">License</h3>
+        <img src="${badgeURL}" alt="${inputs.license} license" />
+        <br>
+        <h3  id="installation">Installation</h3>
+        <div>${inputs.installation}</div>
+        <h3 id="use">##Use</h3>
+        <div>${inputs.use}</div>
+        <h3 id="contribute">Contribute</h3>
+        <div>${inputs.contribute}</div>
+        <h3 id ="test">Test</h3>
+        <div>${inputs.test}</div>
+        <h3 "id=questions">Questions</h3>
+        <div>${inputs.questions}</div>
+        <h3 id="contact">Contact</h3>
+        <img src="${gitURL}" alt="GIT avatar" />
+        <a>Email: ${email}</a>
         `;
         return markdown;
     }    
-// function makeMarkdown(data){
-//     var markdown = `# ${data.title}
-
-//     ## Description
-
-//     ${data.description}
-
-//     ## License
-
-//     ![Apache]("${apacheSrc}")
-
-//     `;
-//     return markdown;
-// }
